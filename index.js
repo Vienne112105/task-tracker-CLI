@@ -30,6 +30,15 @@ function saveTasks(tasks) {
     fs.writeFileSync(task_File, JSON.stringify(tasks, null, 2));
 }
 
+// Reassign sequential IDs to tasks
+function reassignIds(tasks) {
+  return tasks.map((task, index) => ({
+    ...task,
+    id: index + 1
+  }));
+}
+
+// Add a new task
 function addTask(description) {
     if (!description) {
         console.error("Task description cannot be empty.");
@@ -37,22 +46,21 @@ function addTask(description) {
     }
 
     const tasks = loadTasks();
-    // generates a new ID based on the last task's ID
-    const id = tasks.length ? tasks[tasks.length - 1].id + 1 : 1;
+
     // create timestamp based on current time and date
     const now = new Date().toISOString();
-
-    const task = {
-        id,
+    tasks.push({
+        id: 0, // placeholder, will be reassigned
         description,
         status: "todo",
         createdAt: now,
         updatedAt: now
-    };
+  });
 
-    tasks.push(task);
-    saveTasks(tasks);
+    // Reassign sequential IDs
+    const updatedTasks = reassignIds(tasks);
 
+    saveTasks(updatedTasks);
     console.log(`Task added: "${description}"`);
 }
 
@@ -71,15 +79,15 @@ function updateTask(id, newDescription) {
     // update task description and timestamp
     taskID.description = newDescription;
     taskID.updatedAt = new Date().toISOString();
-    saveTasks(tasks);
 
+    saveTasks(tasks);
     console.log("task Updated successfully.");
 
 }
 
 // Delete a task by ID
 function deleteTask(id) {
-    const tasks = loadTasks();
+    let tasks = loadTasks();
     // filter out the task to be deleted by id
     const filteredTasks = tasks.filter(task_id => task_id.id !== Number(id));
 
@@ -88,8 +96,10 @@ function deleteTask(id) {
         console.error("Task not found!");
         return;
     }
-
-    saveTasks(filteredTasks);
+    
+    // Reassign sequential IDs
+    const updatedTasks = reassignIds(filteredTasks);
+    saveTasks(updatedTasks);
     console.log("Task deleted successfully.");
 }
 
@@ -138,6 +148,12 @@ function listTasks(filter) {
 // vvvvvvvvvvvvvvvvvvvvvvvv
 const args = process.argv.slice(2);
 const [command, ...params] = args;
+
+if (args.length === 0) {
+  console.log("No command provided.");
+  process.exit(1);
+}
+
 
 // command => executable, params => arguments passed
 switch (command) {
