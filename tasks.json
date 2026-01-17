@@ -1,0 +1,23 @@
+[
+  {
+    "id": 2,
+    "description": "Clean Room",
+    "status": "done",
+    "createdAt": "2026-01-17T15:06:18.205Z",
+    "updatedAt": "2026-01-17T15:07:00.557Z"
+  },
+  {
+    "id": 4,
+    "description": "Clean Toilet",
+    "status": "todo",
+    "createdAt": "2026-01-17T15:06:36.775Z",
+    "updatedAt": "2026-01-17T15:06:36.775Z"
+  },
+  {
+    "id": 5,
+    "description": "Wash Dishes",
+    "status": "done",
+    "createdAt": "2026-01-17T15:06:45.753Z",
+    "updatedAt": "2026-01-17T15:07:04.141Z"
+  }
+]
